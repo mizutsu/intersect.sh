@@ -13,7 +13,7 @@ set -u
 #######################################
 function usage {
     cat <<EOF
-$(basename ${0}) is a tool to compare multiple files and find common lines and echo them.
+$(basename ${0}) is a tool to get common lines from multiple files.
 
 Usage:
     sh $(basename ${0}) file1 file2 file3 file4 ...
@@ -102,12 +102,12 @@ fi
 
 declare -a intersect_value_list=()
 # Get intersect values by grep each file
-while read LINE
+for line in $(cat "${file_path_list[0]}" | sort | uniq)
 do
   is_error=0
 
   for file_path in "${file_path_list[@]}"; do
-    result=$(grep -E "^${LINE}$" "${file_path}")
+    result=$(grep -E "^${line}$" "${file_path}")
     if [ $? -ne 0 ]; then
       is_error=1
       break
@@ -115,10 +115,10 @@ do
   done
 
   if [ ${is_error} -eq 0 ]; then
-    intersect_value_list+=( "${LINE}" )
+    intersect_value_list+=( "${line}" )
   fi
 
-done < "${file_path_list[0]}"
+done
 
 # print intersect values
 for intersect_value in "${intersect_value_list[@]}"; do
