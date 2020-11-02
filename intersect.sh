@@ -17,6 +17,9 @@ $(basename ${0}) is a tool to compare multiple files and find common lines and e
 
 Usage:
     sh $(basename ${0}) file1 file2 file3 file4 ...
+    sh $(basename ${0}) file?
+    sh $(basename ${0}) file*
+
 
 Options:
     --version, -v     print ${0} version
