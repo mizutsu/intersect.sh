@@ -39,7 +39,7 @@ exit 0
 #   None
 #######################################
 function version {
-  echo "$(basename ${0}) version 0.0.1 "
+  echo "$(basename ${0}) version 0.0.2 "
 
   exit 0
 }
@@ -100,15 +100,17 @@ if [ ${is_error} -eq 1 ]; then
     exit 1
 fi
 
+IFS=$'\n'
 declare -a intersect_value_list=()
+declare -a line_list=($(cat "${file_path_list[0]}" | sort | uniq))
 # Get intersect values by grep each file
-for line in $(cat "${file_path_list[0]}" | sort | uniq)
+for line in "${line_list[@]}"
 do
   is_error=0
 
   for file_path in "${file_path_list[@]}"; do
     result=$(grep -E "^${line}$" "${file_path}")
-    if [ $? -ne 0 ]; then
+    if [ ! $? -eq 0 ]; then
       is_error=1
       break
     fi
